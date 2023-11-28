@@ -19,8 +19,8 @@ bootstrapping <- function (vec, n = 100, bs_i = 20000) {
      }
 }
 
-length(data$Temperature..K.)
-data$Temperature..K. %>% bootstrapping(n = 1000) %>% length()
+data_bs <- lapply(data, function(column) bootstrapping(column, n = 1000))
 
-length(data$Star.type)
-data$Star.type %>% bootstrapping(n=1000) %>% length()
+data_bs <- as.data.frame(data_bs)
+
+write.csv(data_bs, file = "bootstrapped_data.csv", row.names = FALSE)
