@@ -36,6 +36,8 @@ fitdata <- fitdata %>%
      # drop_na(category) # Remove the rows in fitdata$category that is NA
 fitdata$category <- factor(fitdata$category)
 
+fitdata$attended <- factor(fitdata$attended)
+
 sapply(fitdata, function(x) sum(is.na(x)))
 
 get_na <- function(df) {
@@ -48,6 +50,4 @@ get_na <- function(df) {
 fit_na <- get_na(fitdata)
 
 # PRELIMINARY ANALYSIS
-
-# UNSUPERVISED LEARNING - K-MEANS
 

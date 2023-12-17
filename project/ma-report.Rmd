@@ -1,16 +1,18 @@
 ---
 title: "Multivariate Analisys Report"
 subtitle: "(MECD, Minor-CD, & MMAC, 1st Semester, 2023/2024)"
+date: "2023-12-05"
 output:
-  pdf_document: default
+  word_document: default
   html_document:
     df_print: paged
-date: "2023-12-05"
+  pdf_document: default
 header-includes:
-  - \usepackage{titling}
-  - \pretitle{\begin{center}
-    \includegraphics[width=2in,height=2in]{IST_logo.png}\LARGE\\}
-  - \posttitle{\end{center}}
+- \usepackage{titling}
+- \pretitle{\begin{center} \includegraphics[width=2in,height=2in]{IST_logo.png}\LARGE\\}
+- \posttitle{\end{center}}
+bibliography: references.bib
+csl: ieee.csl
 ---
 
 **Professor: M. Rosário Oliveira**
@@ -30,7 +32,7 @@ header-includes:
 
 Multivariate analysis is a pivotal statistical technique in the realm of data science, particularly when dealing with datasets encompassing multiple interrelated variables. It offers a sophisticated approach to understanding the nuanced relationships and patterns that emerge from complex data. This method is crucial for extracting meaningful insights from datasets where multiple factors interact in intricate ways, as is often the case in real-world scenarios.
 
-Multivariate analysis includes a variety of techniques, each suited to different types of data and analysis objectives. Key methods such as logistic regression, decision trees, and cluster analysis are particularly relevant in scenarios where predicting outcomes or classifying data points are the main goals. These techniques allow for a comprehensive analysis, considering how various factors collectively influence outcomes.
+Multivariate analysis includes a variety of techniques, each suited to different types of data and analysis objectives. Key methods such as logistic regression, decision trees, and cluster analysis are particularly relevant in scenarios where predicting outcomes or classifying data points are the main goals. These techniques allow for a comprehensive analysis, considering how various factors collectively influence outcomes [@appliedMultiVar2007].
 
 ## Description of the problem under study
 
@@ -59,7 +61,7 @@ library(stringr)
 
 ```{r exploratory}
 fitdata <- read_csv("fitness_class_2212.csv", show_col_types = FALSE)
-str(fitdata)
+# str(fitdata)
 summary(fitdata)
 
 sapply(fitdata, function(x) sum(is.na(x))) # check each column for NA values
@@ -115,16 +117,16 @@ fitdata$category <- factor(fitdata$category)
 table(fitdata$category)
 ```
 
-Dealing with missing values is crucial in data analysis to ensure the integrity and validity of the results. Missing data can introduce bias, reduce the statistical power, and lead to invalid conclusions. By appropriately addressing these gaps, whether through imputation, removal, or analysis modifications, we can enhance the robustness of our findings and make more accurate inferences from the data. This process is essential for maintaining the quality and reliability of statistical analysis in any research or data-driven decision-making.
+Dealing with missing values is crucial in data analysis to ensure the integrity and validity of the results. Missing data can introduce bias, reduce the statistical power, and lead to invalid conclusions. By appropriately addressing these gaps, whether through imputation, removal, or analysis modifications, we can enhance the robustness of our findings and make more accurate inferences from the data. This process is essential for maintaining the quality and reliability of statistical analysis in any research or data-driven decision-making [@little2002statistical].
 
 ```{r}
 get_na <- function(df) {
-     na_rows <- lapply(df, function(x) which(is.na(x))) %>% # get indices of NA values in each column
+     # get indices of NA values in each column
+     na_rows <- lapply(df, function(x) which(is.na(x))) %>%
           unlist() %>%
           unique() # get the unique indices of all columns
      return(df[na_rows, , drop = FALSE])
 }
-
 fit_na <- get_na(fitdata)
 
 na_ratio <- dim(fit_na)[1] / dim(fitdata)[1]
@@ -133,4 +135,15 @@ fitdata <- na.omit(fitdata)
 ```
 
 For `na_ratio` = `r na_ratio` the removal of missing values (NAs) is acceptable since their proportion is very small, as it minimally affects the dataset's overall integrity and distribution.
+
+## Estimation and validation methods
+
+### K-menas clustering
+Yeah...[@peng2016exploratory]
+
+## Discussion of the results and interpretation of the findings
+
+## Conclusions
+
+## References
 
