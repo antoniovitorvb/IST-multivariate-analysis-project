@@ -3,10 +3,10 @@ title: "Multivariate Analisys Report"
 subtitle: "(MECD, Minor-CD, & MMAC, 1st Semester, 2023/2024)"
 date: "2023-12-05"
 output:
-  word_document: default
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
+  word_document: default
 header-includes:
 - \usepackage{titling}
 - \pretitle{\begin{center} \includegraphics[width=2in,height=2in]{IST_logo.png}\LARGE\\}
@@ -120,26 +120,25 @@ table(fitdata$category)
 Dealing with missing values is crucial in data analysis to ensure the integrity and validity of the results. Missing data can introduce bias, reduce the statistical power, and lead to invalid conclusions. By appropriately addressing these gaps, whether through imputation, removal, or analysis modifications, we can enhance the robustness of our findings and make more accurate inferences from the data. This process is essential for maintaining the quality and reliability of statistical analysis in any research or data-driven decision-making [@little2002statistical].
 
 ```{r}
-get_na <- function(df) {
-     # get indices of NA values in each column
+get_na <- function(df) { # get indices of NA values in each column
      na_rows <- lapply(df, function(x) which(is.na(x))) %>%
-          unlist() %>%
-          unique() # get the unique indices of all columns
-     return(df[na_rows, , drop = FALSE])
+          unlist() %>% unique() # get the unique indices of all columns
+     return(na_rows)
 }
-fit_na <- get_na(fitdata)
+na_rows <- get_na(fitdata)
+na_ratio <- length(na_rows) / dim(fitdata)[1]
 
-na_ratio <- dim(fit_na)[1] / dim(fitdata)[1]
-
-fitdata <- na.omit(fitdata)
+fitdata <- fitdata[-na_rows, ]
 ```
 
 For `na_ratio` = `r na_ratio` the removal of missing values (NAs) is acceptable since their proportion is very small, as it minimally affects the dataset's overall integrity and distribution.
 
+
+
 ## Estimation and validation methods
 
 ### K-menas clustering
-Yeah...[@peng2016exploratory]
+The K-means clustering algorithm, crucial in high-dimensional data analysis, is detailed in classics like John Hartigan's "Clustering Algorithms." This iterative, algorithmic method identifies centroids of pre-specified clusters in multi-dimensional spaces, a task challenging in higher dimensions. K-means partitions data into clusters, requiring an initial guess of cluster numbers. Adjusting this number in subsequent runs helps in fine-tuning the clustering outcome, essential for analyzing complex data structures. [@peng2016exploratory]
 
 ## Discussion of the results and interpretation of the findings
 

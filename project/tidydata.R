@@ -44,10 +44,8 @@ get_na <- function(df) {
      na_rows <- lapply(df, function(x) which(is.na(x))) %>% # get indices of NA values in each column
           unlist() %>%
           unique() # get the unique indices of all columns
-     return(df[na_rows, , drop = FALSE])
+     return(na_rows)
 }
 
-fit_na <- get_na(fitdata)
-
-# PRELIMINARY ANALYSIS
-
+fitdata[get_na(fitdata), ]
+fitdata <- fitdata[-get_na(fitdata), ]
