@@ -1,31 +1,95 @@
 ---
-title: "MultivariateAnalisys Report"
+title: "Multivariate Analisys Report"
+subtitle: "(MECD, Minor-CD, & MMAC, 1st Semester, 2023/2024)"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-date: "`r Sys.Date()`"
+date: "2023-12-05"
+header-includes:
+  - \usepackage{titling}
+  - \pretitle{\begin{center}
+    \includegraphics[width=2in,height=2in]{IST_logo.png}\LARGE\\}
+  - \posttitle{\end{center}}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+**Professor: M. Rosário Oliveira**
 
-## R Markdown
+**Group Members:**
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+| Antonio Villas Bôas | Darlan Nascimento | Emma Dennis-Knieriem | Leonardo Aikawa | Tunahan Güneş |
+|:-:|:-:|:-:|:-:|:-:|
+| ist1105429 | ist1108076 | ist1105545 | ist1105545 | ist1108108 |
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+# Fitness Club Dataset for ML Classification {style="align:center"}
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
+\newpage
+
+## Introduction
+
+Multivariate analysis is a pivotal statistical technique in the realm of data science, particularly when dealing with datasets encompassing multiple interrelated variables. It offers a sophisticated approach to understanding the nuanced relationships and patterns that emerge from complex data. This method is crucial for extracting meaningful insights from datasets where multiple factors interact in intricate ways, as is often the case in real-world scenarios.
+
+Multivariate analysis includes a variety of techniques, each suited to different types of data and analysis objectives. Key methods such as logistic regression, decision trees, and cluster analysis are particularly relevant in scenarios where predicting outcomes or classifying data points are the main goals. These techniques allow for a comprehensive analysis, considering how various factors collectively influence outcomes.
+
+## Description of the problem under study
+
+Our dataset was select from [Kaggle](https://www.kaggle.com/datasets/ddosad/datacamps-data-science-associate-certification/data). The dataset provided for this analysis originates from GoalZone, a well-known fitness club chain in Canada. GoalZone operates several fitness classes, with capacities of either 25 or 15 participants. A significant challenge they face is the discrepancy between class bookings and actual attendance. While some classes are consistently fully booked, the actual attendance rate often falls short of expectations. This scenario presents both a logistical challenge and an opportunity for optimization.
+
+The primary challenge is predicting whether a member who has booked a class will actually attend. Accurately forecasting attendance allows GoalZone to optimize class capacities effectively, ensuring maximum utilization of resources and enhanced member satisfaction. This challenge involves analyzing various factors that might influence attendance, such as the time of the class, member demographics, previous attendance patterns, and class type.
+
+## Objectives
+
+The analysis of the GoalZone dataset aims to achieve the following objectives:
+
+Predictive Analysis: Develop a predictive model that can accurately forecast whether a member who has booked a class will attend. This involves identifying key variables that influence attendance and employing appropriate multivariate techniques.
+Optimization of Class Capacities: Use the insights gained from the predictive model to optimize class capacities, enabling GoalZone to allocate spaces more effectively and potentially increase the total number of spaces offered.
+Enhancing Member Experience: By improving the accuracy of attendance predictions, GoalZone can reduce overbooking and under-utilization issues, leading to a better overall experience for members.
+Data-Driven Decision Making: Provide GoalZone with data-driven strategies to manage class schedules and capacities, thereby improving operational efficiency.
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(dplyr)
+# library(ggplot2)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r exploratory}
+fitdata <- read_csv("fitness_class_2212.csv", show_col_types = FALSE)
+str(fitdata)
+summary(fitdata)
+```
+
+## Data Exploration and Cleaning
+
+We noticed that some columns are not in the ideal format to work with our classification models. The column `days_before` should be a discrete (integer) number of days before the class the member registered, but in `fitdata` we got `class(fitdata$days_before)` as `r class(fitdata$days_before)`. Here are the steps we used to convert to integer:
+
+```{r}
+unique(fitdata$days_before)
+
+fitdata$days_before <- fitdata$days_before %>%
+     strsplit(split = " ") %>% # split some strings that had more than the number of days
+     sapply(function(x) x[1]) %>% # gets the 1st element of the split strings
+     as.integer() # converts to integer
+
+class(fitdata$days_before)
+```
+
+For `day_of_week`, we needed to standardize to uniquely 7 values corresponding to the days of the week.
+```{r}
+unique(fitdata$day_of_week)
+
+fitdata$day_of_week <- fitdata$day_of_week %>%
+     tolower() %>% # converts to lower case
+     substr(1, 3) %>% # gets only the 3 first elements of each string
+     factor() # Converts to factor to be used as categorical variable
+
+table(fitdata$day_of_week)
+```
+
+
+
+
+
