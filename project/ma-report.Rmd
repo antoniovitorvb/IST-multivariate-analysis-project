@@ -21,7 +21,7 @@ header-includes:
 |:-:|:-:|:-:|:-:|:-:|
 | ist1105429 | ist1108076 | ist1105545 | ist1105545 | ist1108108 |
 
-# Fitness Club Dataset for ML Classification {style="align:center"}
+# Fitness Club Dataset for ML Classification
 
 
 \newpage
@@ -53,13 +53,16 @@ You can also embed plots, for example:
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(dplyr)
-# library(ggplot2)
+library(tidyr)
+library(stringr)
 ```
 
 ```{r exploratory}
 fitdata <- read_csv("fitness_class_2212.csv", show_col_types = FALSE)
 str(fitdata)
 summary(fitdata)
+
+sapply(fitdata, function(x) sum(is.na(x))) # check each column for NA values
 ```
 
 ## Data Exploration and Cleaning
@@ -89,7 +92,45 @@ fitdata$day_of_week <- fitdata$day_of_week %>%
 table(fitdata$day_of_week)
 ```
 
+`fitdata$time` is a ordinal variable which indicates if the booked fitness class is in the morning (AM) or afternoon (PM). This is also categorical so we encoded it to numerical representation ("AM" / "PM" to 0 / 1).
 
+```{r}
+table(fitdata$time)
 
+fitdata$time <- ifelse(fitdata$time == "AM", 0, 1) %>%
+     factor()
 
+table(fitdata$time)
+```
+
+`fitdata$category` correspond to the category of the fitness class. In this dataset only 6 categories are present and one of them is "-".
+
+```{r}
+table(fitdata$category)
+
+fitdata <- fitdata %>%
+     mutate(category = na_if(category, "-")) # Replace "-" with NA
+
+fitdata$category <- factor(fitdata$category)
+table(fitdata$category)
+```
+
+Dealing with missing values is crucial in data analysis to ensure the integrity and validity of the results. Missing data can introduce bias, reduce the statistical power, and lead to invalid conclusions. By appropriately addressing these gaps, whether through imputation, removal, or analysis modifications, we can enhance the robustness of our findings and make more accurate inferences from the data. This process is essential for maintaining the quality and reliability of statistical analysis in any research or data-driven decision-making.
+
+```{r}
+get_na <- function(df) {
+     na_rows <- lapply(df, function(x) which(is.na(x))) %>% # get indices of NA values in each column
+          unlist() %>%
+          unique() # get the unique indices of all columns
+     return(df[na_rows, , drop = FALSE])
+}
+
+fit_na <- get_na(fitdata)
+
+na_ratio <- dim(fit_na)[1] / dim(fitdata)[1]
+
+fitdata <- na.omit(fitdata)
+```
+
+For `na_ratio` = `r na_ratio` the removal of missing values (NAs) is acceptable since their proportion is very small, as it minimally affects the dataset's overall integrity and distribution.
 

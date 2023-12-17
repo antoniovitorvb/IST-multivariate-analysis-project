@@ -1657,8 +1657,8 @@ display: none;
 </tr>
 </tbody>
 </table>
-<div id="fitness-club-dataset-for-ml-classification" class="section level1" style="align:center">
-<h1 style="align:center">Fitness Club Dataset for ML Classification</h1>
+<div id="fitness-club-dataset-for-ml-classification" class="section level1">
+<h1>Fitness Club Dataset for ML Classification</h1>
 <div style="page-break-after: always;"></div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
@@ -1790,6 +1790,38 @@ table(fitdata$day_of_week)</code></pre>
 <pre><code>## 
 ## fri mon sat sun thu tue wed 
 ## 305 228 202 213 241 195 116</code></pre>
+<p><code>fitdata$time</code> is a ordinal variable which indicates if
+the booked fitness class is in the morning (AM) or afternoon (PM). This
+is also categorical so we encoded it to numerical representation (“AM” /
+“PM” to 0 / 1).</p>
+<pre class="r"><code>table(fitdata$time)</code></pre>
+<pre><code>## 
+##   AM   PM 
+## 1141  359</code></pre>
+<pre class="r"><code>fitdata$time &lt;- ifelse(fitdata$time == &quot;AM&quot;, 0, 1) %&gt;%
+     factor()
+
+table(fitdata$time)</code></pre>
+<pre><code>## 
+##    0    1 
+## 1141  359</code></pre>
+<p><code>fitdata$category</code> correspond to the category of the
+fitness class. In this dataset only 6 categories are present and one of
+them is “-”.</p>
+<pre class="r"><code>table(fitdata$category)</code></pre>
+<pre><code>## 
+##        -     Aqua  Cycling     HIIT Strength     Yoga 
+##       13       76      376      667      233      135</code></pre>
+<pre class="r"><code>na_ratio = length(fitdata$category[fitdata$category == &quot;-&quot;]) / length(fitdata$category)
+
+fitdata &lt;- fitdata %&gt;%
+     mutate(category = na_if(category, &quot;-&quot;)) %&gt;% # Replace &quot;-&quot; with NA
+     drop_na(category) # Remove the rows in fitdata$category that is NA
+
+fitdata$category &lt;- factor(fitdata$category) </code></pre>
+<p>Since <code>na_ratio</code> = 0.0086667 the removal of missing values
+(NAs) is acceptable when their proportion is very small, as it minimally
+affects the dataset’s overall integrity and distribution.</p>
 </div>
 </div>
 
