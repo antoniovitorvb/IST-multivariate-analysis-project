@@ -21,7 +21,7 @@ csl: ieee.csl
 
 | Antonio Villas Bôas | Darlan Nascimento | Emma Dennis-Knieriem | Leonardo Aikawa | Tunahan Güneş |
 |:-:|:-:|:-:|:-:|:-:|
-| ist1105429 | ist1108076 | ist1105545 | ist1105545 | ist1108108 |
+| ist1105429 | ist1108076 | ist1105545 | ist1104694 | ist1108108 |
 
 # Fitness Club Dataset for ML Classification
 
