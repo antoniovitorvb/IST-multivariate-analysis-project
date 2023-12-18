@@ -133,12 +133,19 @@ fitdata <- fitdata[-na_rows, ]
 
 For `na_ratio` = `r na_ratio` the removal of missing values (NAs) is acceptable since their proportion is very small, as it minimally affects the dataset's overall integrity and distribution.
 
-
-
 ## Estimation and validation methods
 
-### K-menas clustering
+### 1. K-means clustering
+
 The K-means clustering algorithm, crucial in high-dimensional data analysis, is detailed in classics like John Hartigan's "Clustering Algorithms." This iterative, algorithmic method identifies centroids of pre-specified clusters in multi-dimensional spaces, a task challenging in higher dimensions. K-means partitions data into clusters, requiring an initial guess of cluster numbers. Adjusting this number in subsequent runs helps in fine-tuning the clustering outcome, essential for analyzing complex data structures. [@peng2016exploratory]
+
+As an unsupervised learning algorithm, K-means does not work with a target variable (in our case, `fitdata$attended`), but it can segment data into clusters, which can then potentially be analyzed to infer patterns that might be relevant for prediction.
+
+For this dataset, we used 2 centroids.
+
+### 2. Logistic Regression
+
+### 3. Decision Tree
 
 ## Discussion of the results and interpretation of the findings
 
