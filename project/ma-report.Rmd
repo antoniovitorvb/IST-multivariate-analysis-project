@@ -141,7 +141,33 @@ The K-means clustering algorithm, crucial in high-dimensional data analysis, is 
 
 As an unsupervised learning algorithm, K-means does not work with a target variable (in our case, `fitdata$attended`), but it can segment data into clusters, which can then potentially be analyzed to infer patterns that might be relevant for prediction.
 
-For this dataset, we used 2 centroids.
+Two unsupervised learning techniques were used to compare the results: k-means clustering and agglomerative nesting (Hierarchical Clustering). Although is not directly correlated, we used 2 centroids to try to see if each model would classify the fitness club attendance into 0 or 1 and then compare with `fitdata$attended`.
+
+The metric used to compare models was a simple proportion of matching attendance and cluster assignments given by:
+
+$$
+\frac{\sum(\text{fitdata.attended} == \text{prediction})}{\text{length}(\text{fitdataattended})}
+$$
+
+For the agglomerative nesting (agnes) we tried an algorithm that tested every combination of `metrics` and `methods` such:
+
+```{r}
+metrics <- c('euclidean', 'manhattan')
+methods <- c('single', 'complete', 'average')
+```
+
+The best AgNes combination was: {metric: manhattan, method: complete}. And the accuracy results are shown below:
+
+| Model   | Accuracy |
+|---------|:--------:|
+| K-means |     0.49488    |
+| AgNes   |     0.72392    |
+
+The image below shows plots of the actual fitness club attendance, the attendance prediction of the K-means models, and the attendance of the best AgNes model, respectively. For more details about the algorithm used to create the models and plots, please check the `kmeans.R` file.
+
+![Attendance Comparison](attendance_comparison.png)
+
+According to the plots above, there doesn't appear to be a clear boundary separating the attended and not-attended groups in either plot, suggesting that these features alone may not strongly predict attendance.
 
 ### 2. Logistic Regression
 
