@@ -83,6 +83,7 @@ class(fitdata$days_before)
 ```
 
 For `day_of_week`, we needed to standardize to uniquely 7 values corresponding to the days of the week.
+
 ```{r}
 unique(fitdata$day_of_week)
 
@@ -178,20 +179,28 @@ According to the plots above, there doesn't appear to be a clear boundary separa
 To train and test our supervised models, we applied a 80-20 split for our data. And, all the models we applied are then trained and tested on the same sets such that: 
 
 ```{r}
-library(caret) 
-library(rpart)
+source('tidydata.R')
 
-set.seed(42) #Setting the seed for reproducibility
+library(caret)
+library(dplyr)
+library(MLmetrics)
 
-# Specify the proportion of the test data
-test_proportion <- 0.2
+fitdata_prepared <- fitdata %>%
+     select(-booking_id) %>% 
+     mutate_at(
+          vars(months_as_member,weight,days_before),
+          scale) %>%  # Scale numerical variables
+     mutate(
+          day_of_week = as.numeric(day_of_week),  # Convert factors to numeric
+          time = as.numeric(time),
+          category = as.numeric(category)
+     )
 
-# Use createDataPartition to create indices for the training set randomly
-train_indices <- createDataPartition(fitdata$attended,p = 1 - test_proportion, list = FALSE)
+set.seed(42)
+training_indices <- createDataPartition(fitdata_prepared$attended, p = 0.8, list = FALSE)
 
-#Creating Stratified Training And Test Datasets
-train_data <- fitdata[train_indices, ]
-test_data <- fitdata[-train_indices, ]
+train_data <- fitdata_prepared[training_indices, ]
+test_data <- fitdata_prepared[-training_indices, ]
 ```
 
 **1. Logistic Regression**
@@ -204,7 +213,6 @@ Applying logistic regression to this dataset is appropriate because the target v
 model <- glm(attended ~ ., data = train_data, family = "binomial")
 ```
 
-<<<<<<< HEAD
 ```{r fig.align='center', out.width='45%', echo=FALSE}
 knitr::include_graphics("lr_confusion_matrix.png")
 ```
@@ -216,21 +224,23 @@ knitr::include_graphics("lr_confusion_matrix.png")
 | Logistic Regression   | 0.7826   | 
 
 **2. Decision Tree**
-=======
+
 <!-- ![Decision Tree Confusion Matrices](lr_confusion_matrix.png) -->
 ```{r fig.align='center', out.width='65%', echo=FALSE}
 knitr::include_graphics("lr_confusion_matrix.png")
 ```
+
 | Data                    | Accuracy | F-1 Score |
 |-------------------------|----------|:---------:|
 | Logistical Regression   | 0.7826   | 0.8552339 |
->>>>>>> 47ccbadfdb8ab65827fc17ec7ca785c93871579b
 
 The Decision Tree is a supervised classification model known for its simplicity and interpretability. It handles categorical variables well and is not affected much by irrelevant features. However, it can overfit and is sensitive to training data variability. For our categorical-heavy data, a decision tree could be advantageous. To avoid overfitting, we can limit tree growth by setting constraints or prune the tree after full growth, though care must be taken to prevent underfitting with too much restriction.
 
 In this project, both of the approaches are applied and tested with a large number of different parameters. At their best settings of both approaches by looking at the test data performance, the resulting trees were identical. Therefore, we kept the model with the first approach with minsplit=20, and minbucket=7 for simplicity: 
 
 ```{r}
+library(rpart)
+
 dt_model <- rpart(attended ~ ., data = train_data, method = "class", minsplit=20, minbucket=7)
 ```
 
@@ -257,7 +267,13 @@ Although the accuracies are relatively better, having significantly lower balanc
 
 ## Discussion of the results and interpretation of the findings
 
+Our objective was to predict and optimize actual attendance, given the risks and costs of having overbooked or under-attended classes. Before applying any multivariate analysis techniques, the data had to be cleaned and formatted for us to work with. The missing values were discarded to ensure uniformity, which did not compromise the dataset\'92s integrity due to the small proportion of these values. After preprocessing, the remaining dataset was ready for us to begin analyzing.
+
+Unsupervised learning methods K-means clustering and agglomerative nesting (AgNes) were used to identify potential patterns across variables. Supervised learning models logistic regression and decision tree classification were used to predict the target, actual class attendance, from the features at our disposal in the dataset.
+
 ## Conclusions
+
+The accuracy results the the unsupervised learning methods were not high, suggesting the the models struggled to effectively classify attendance based on the input features. The accuracy of the decision tree model was higher on the training set than on the test set, where it struggled with class imbalance. This may imply that the classes in the data are not easily and clearly separable, and that additional features not already included in the dataset may be needed for more accurate classification. If this is the case, GoalZone would be advised to include less obvious information that may reveal hidden or confounding variables not already included in the dataset we analyzed.
 
 ## References
 

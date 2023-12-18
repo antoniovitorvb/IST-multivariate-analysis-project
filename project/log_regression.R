@@ -15,8 +15,7 @@ fitdata_prepared <- fitdata %>%
           category = as.numeric(category)
      )
 
-# Step 3: Splitting the Dataset
-set.seed(42) # For reproducibility
+set.seed(42)
 training_indices <- createDataPartition(fitdata_prepared$attended, p = 0.8, list = FALSE)
 
 train_data <- fitdata_prepared[training_indices, ]
