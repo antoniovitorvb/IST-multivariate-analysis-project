@@ -187,6 +187,17 @@ test_data <- fitdata[-train_indices, ]
 ```
 
 ### 2. Logistic Regression
+Logistic regression is a statistical model used for predicting the probability of a binary outcome based on one or more predictor variables. Unlike linear regression, which predicts a continuous outcome, logistic regression is used when the dependent variable is categorical and specifically binary, meaning it has only two possible outcomes (like yes/no, true/false, 1/0). The model estimates the probability that a given input point belongs to a certain class. The output of logistic regression is a probability score (between 0 and 1), and it employs a logistic function, often called the sigmoid function, to model the data. This function has an 'S'-shaped curve that can take any real-valued number and map it into a value between 0 and 1, making it useful for models where the output is a probability.
+
+Applying logistic regression to this dataset is appropriate because the target variable, 'attended', is binary, indicating whether a fitness club member attended a class (1) or not (0). This fits perfectly with the nature of logistic regression, which is designed to handle binary outcome variables. Additionally, the dataset contains a mix of continuous, discrete, and categorical variables (like weight, days_before, day_of_week, time, etc.), which logistic regression can effectively incorporate to predict the probability of attendance. The model can thus help in understanding the relationship between these features and the likelihood of a member attending a class, providing valuable insights that could be used for decision-making or strategy development in the context of the fitness club. For instance, it can identify patterns or key factors influencing attendance, aiding in resource planning, personalized member engagement, or targeted marketing strategies.
+```{r}
+model <- glm(attended ~ ., fitdata = train_data, family = "binomial")
+```
+
+![Decision Tree Confusion Matrices](lr_confusion_matrix.png)
+| Data                    | Accuracy |
+|-------------------------|----------|
+| Logistical Regression   | 0.7826   | 
 
 ### 3. Decision Tree
 The Decision Tree algorithm is another supervised model that can be used for classification tasks. The algorithm learns classes by hierarchically slicing the features, so that it improves overall target metric. The strengths of this algorithm relies on the simplicity of it. They are easy to interpret, can deal categorical variables efficiently, and can deal noninformative features. The downsides of this algorithm is, being prone to overfit if not dealt properly, and sensivity to the training data and its variance. Since majority of our features are categorical, we decided that applying decision trees could be beneficial.

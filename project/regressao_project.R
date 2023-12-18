@@ -1,6 +1,7 @@
 # Load necessary libraries
 library(caret)
 library(dplyr)
+library(vcd)
 
 # Step 1: Load the dataset
 path = "C:/Users/Darla/Downloads/Acadêmico/Técnico Lisboa/Disciplinas/Análise Multivariada/IST-multivariate-analysis-project/project/fitness_class_2212.csv"
@@ -33,4 +34,6 @@ model <- glm(attended ~ ., data = train_data, family = "binomial")
 # Step 5: Model Evaluation
 predictions <- predict(model, test_data, type = "response")
 predictions <- ifelse(predictions > 0.5, 1, 0)
-confusionMatrix(as.factor(predictions), test_data$attended)
+conf_matrix <- confusionMatrix(as.factor(predictions), test_data$attended)
+fourfoldplot(conf_matrix$table, color = c("#CC6666", "#9999CC"), conf.level = 0, margin = 1)
+
