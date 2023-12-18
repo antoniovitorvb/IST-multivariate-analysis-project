@@ -14,10 +14,10 @@ fitdata <- subset(fitdata, select = -booking_id)
 ###############################################################################
 ##                     Split into Training and Testing set                    ##
 ################################################################################
-set.seed(123)
+set.seed(42)
 
 # Specify the proportion of data to be used for testing (0.3 for a 70-30 split)
-test_proportion <- 0.3
+test_proportion <- 0.2
 
 # Use createDataPartition to create indices for the training set
 train_indices <- createDataPartition(fitdata$attended, 
@@ -34,7 +34,8 @@ y_test <- as.factor(test_data$attended)
 ################################################################################
 ##                            Decision Tree                                   ##
 ################################################################################
-dt_model <- rpart(attended ~ ., data = train_data, method = "class") # minsplit=20, minbucket=7 with Gini Index
+
+dt_model <- rpart(attended ~ ., data = train_data, method = "class", minsplit=20, minbucket=7) #Uses Gini Index
 print(dt_model)
 
 #Plot the tree
