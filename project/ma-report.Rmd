@@ -257,11 +257,25 @@ Although the accuracies are relatively better, having significantly lower balanc
 
 ## Discussion of the results and interpretation of the findings
 
+Results in the real world can be messier and less satisfying than conclusions that we reach in theoretical problems or learning models, as is the case here. The combination of features in this dataset are not enough to predict our target, actual class attendance. This was surprising, since it’s logical that current weight, days before commitment, and fitness category all seem relevant factors in how much a member would want to attend their session. In our case, there was no such straightforward or satisfactory answer.
+
+To a researcher doing further investigation, we would advise less directly related variables, and for them to think more outside the box. Perhaps we made an incorrect assumption, that the features in our dataset had to do with motivation to attend classes, when in actuality, attendance motivation was not as high a factor as outside circumstances; things the fitness group member could not control and had to forfeit the class they signed up for. Some reasons may include a young child temper tantrum, a family member’s sickness, a traffic jam, or unpredictable weather conditions, which could be measured in features as number of young children, number of adults who depend on them, distance from their home to the gym, and temperature/precipitation, respectively.
+
+Another feature that would be helpful is the member ID. While the booking ID is already a feature, member ID would be a valued additional feature. It is reasonable to assume that individual members would be pretty consistent about how committed they were to their bookings. For example, a member who has previously skipped several of their booked classes is less likely to attend than a member who has a nearly perfect attendance record.
+
+Regarding the apparent inseparability, some boundary regions might be teased out by adding more features not currently expressed by the data. Age, payment method, job satisfaction, and reason for membership may illuminate separation boundaries.
+
+It is also possible that broader temporal trends have an effect across groups. For example, perhaps people skip the Saturday class they booked during week, or in the summer they’re already getting outdoor recreation and feel little need for indoor fitness classes, or people decide to sleep in rather than waking up for an early class. A time series analysis could determine whether certain times of day/week/year have any more bearing on class absences.
+
+If the combination of these new features together made some patterns clear, we might also be able to determine outliers. Identifying and taking into account outliers would strengthen our models.
+
+In the dataset, the “attended” binary variable could be balanced. As is, there are more absents (0) than addends (1), by a ratio of approximately 70% to 30%, respectively. If this class imbalance were dealt with by oversampling the 1’s, then perhaps a more assured conclusion could be drawn.
+
+## Conclusions
+
 Our objective was to predict and optimize actual attendance, given the risks and costs of having overbooked or under-attended classes. Before applying any multivariate analysis techniques, the data had to be cleaned and formatted for us to work with. The missing values were discarded to ensure uniformity, which did not compromise the dataset\'92s integrity due to the small proportion of these values. After preprocessing, the remaining dataset was ready for us to begin analyzing.
 
 Unsupervised learning methods K-means clustering and agglomerative nesting (AgNes) were used to identify potential patterns across variables. Supervised learning models logistic regression and decision tree classification were used to predict the target, actual class attendance, from the features at our disposal in the dataset.
-
-## Conclusions
 
 The accuracy results the the unsupervised learning methods were not high, suggesting the the models struggled to effectively classify attendance based on the input features. The accuracy of the decision tree model was higher on the training set than on the test set, where it struggled with class imbalance. This may imply that the classes in the data are not easily and clearly separable, and that additional features not already included in the dataset may be needed for more accurate classification. If this is the case, GoalZone would be advised to include less obvious information that may reveal hidden or confounding variables not already included in the dataset we analyzed.
 
