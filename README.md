@@ -3,6 +3,8 @@
     <h1 align="center">Multivariate Analysis Project</h1>
 </p>
 
+Check our [project report](https://github.com/antoniovitorvb/IST-multivariate-analysis-project/blob/main/ma-report.pdf) of our multivariate analysis of the [Fitness Club Attendance Classification](https://www.kaggle.com/datasets/ddosad/datacamps-data-science-associate-certification/data) from Kaggle.
+
 ## Quick Git tutorial:
 
 **Pre-requisites:** Have a GitHub account
