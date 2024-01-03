@@ -20,8 +20,13 @@ KM_obj <- kmeans(fitdata_prepared, centers = 2)
 
 fitdata$cluster <- KM_obj$cluster - 1
 
-paste("K-means accuracy =", sum(fitdata$attended == fitdata$cluster) / length(fitdata$attended))
+print(
+     paste("K-means accuracy =",
+           sum(fitdata$attended == fitdata$cluster) / length(fitdata$attended))
+)
 
+cm_km <- confusionMatrix(factor(fitdata$cluster), fitdata$attended)
+print(cm_km)
 
 # Agglomerative Nesting (Hierarchical Clustering)
 
@@ -62,9 +67,13 @@ best_agnes <- agnes(
 )
 fitdata$best_agnes <- cutree(best_agnes, k = 2) - 1
 
-paste("AgNes accuracy =", 
-      sum(fitdata$attended == fitdata$best_agnes) / length(fitdata$attended))
+print(
+     paste("AgNes accuracy =",
+           sum(fitdata$attended == fitdata$best_agnes) / length(fitdata$attended))
+)
 
+cm_agnes <- confusionMatrix(factor(fitdata$best_agnes), fitdata$attended)
+print(cm_agnes)
 # plot(best_agnes, which.plots = 2, main = "Dendrogram of Hierarchical Clustering")
 
 library(ggplot2)
